@@ -1,0 +1,53 @@
+%ex_tcs1
+
+close all; clear all; clc;
+I1 = imread('rice.png');
+
+str1 = strel('disk',15); 
+background = imopen(I1,str1);
+figure, imshow(background); 
+
+I2 = I1 - background; 
+I3 = imadjust(I2);
+figure, imshow(I3); title('Adjusted grayscale image')
+
+%binarization using threshold
+I3_bw = imbinarize(I3,0.3);
+figure, imshow(I3); title('Binarized image at threshold = 0.3')
+
+%binarization using Otsu's method
+T = graythresh(I3);
+I4_bw = imbinarize(I3,T);
+figure, imshow(I4_bw); title('Otsu method')
+
+%%binarization using adaptive thresholding
+h3 = fspecial('average',[3 3]);
+h7 = fspecial('average',[7 7]);
+h11 = fspecial('average',[11 11]);
+
+I4_3 = imfilter(I1,h3);
+I4_7 = imfilter(I1,h7);
+I4_11 = imfilter(I1,h11);
+
+figure, imshow(I4_3); title('average-filtered image, 3x3')
+figure, imshow(I4_7); title('average-filtered image, 7x7')
+figure, imshow(I4_11); title('average-filtered image, 11x11')
+
+%minus 95% 
+c = 0.95;
+I5_3 = I1-c*I4_3; 
+I5_7 = I1-c*I4_7;
+I5_11 = I1-c*I4_11;
+
+I5_3t = im2bw(I5_3,0.1); figure, imshow(I5_3t); title('average-filtered image, 3x3')
+I5_7t = im2bw(I5_7,0.1); figure, imshow(I5_7t); title('average-filtered image, 7x7')
+I5_11t = im2bw(I5_11,0.1); figure, imshow(I5_11t); title('average-filtered image, 11x11')
+
+I_at = adaptthresh(I1,0.25); 
+figure, imshow(imbinarize(I1,I_at)); title('Matlab Adaptive Thresholding, sensitivity 0.25')
+
+I_at = adaptthresh(I1,0.5); 
+figure, imshow(imbinarize(I1,I_at)); title('Matlab Adaptive Thresholding, sensitivity 0.5')
+
+I_at = adaptthresh(I1,0.75); 
+figure, imshow(imbinarize(I1,I_at)); title('Matlab Adaptive Thresholding, sensitivity 0.75')
