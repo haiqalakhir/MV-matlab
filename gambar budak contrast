@@ -1,3 +1,5 @@
+%testdrive1
+
 close all; clear all; clc;
 
 I1 = imread('pout.tif'); %reading the image
