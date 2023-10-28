@@ -1,4 +1,4 @@
-close all; clear all; clc;
+close all; clear all; clc; 
 
 highlighter = imread('pencolor1.jpg');
 I = rgb2hsv(highlighter);  % Convert RGB image to chosen color space hsv
